@@ -1,2 +1,2 @@
 # mongodb-express-react-node
-MongoDB ( Mongoose ORM ) + Express JS + React JS ( Tailwind CSS ) + Node JS
+MongoDB ( Mongoose ODM ) + Express JS + React JS ( Tailwind CSS ) + Node JS
