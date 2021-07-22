@@ -1,3 +1,4 @@
+import Image from 'next/image'
 const CustomTable = ({ data }: any) => {
 	return (
 		<div className="flex flex-col p-10">
@@ -49,10 +50,12 @@ const CustomTable = ({ data }: any) => {
 											<td className="px-6 py-4 whitespace-nowrap">
 												<div className="flex items-center">
 													<div className="flex-shrink-0 h-10 w-10">
-														<img
+														<Image
+															width={50}
+															height={50}
 															className="h-10 w-10 rounded-full"
 															src={
-																'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61'
+																'https://example.comm/photo-1570295999919-56ceb5ecca61'
 															}
 															alt=""
 														/>

@@ -25,7 +25,7 @@ const Home: FC<{ data: string[] }> = ({ data }) => {
 	);
 };
 
-export async function getServerSideProps(context) {
+export async function getServerSideProps() {
 	const { data } = await axios.get(`${process.env.API_URL}/users`);
 
 	return {
