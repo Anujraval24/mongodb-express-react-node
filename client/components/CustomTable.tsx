@@ -55,7 +55,7 @@ const CustomTable = ({ data }: any) => {
 															height={50}
 															className="h-10 w-10 rounded-full"
 															src={
-																'https://example.comm/photo-1570295999919-56ceb5ecca61'
+																'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61'
 															}
 															alt=""
 														/>

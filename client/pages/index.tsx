@@ -1,5 +1,6 @@
 import { FC, useState } from 'react';
 import axios from 'axios';
+import Head from 'next/head';
 
 import CustomTable from '../components/CustomTable';
 
@@ -8,6 +9,11 @@ const Home: FC<{ data: string[] }> = ({ data }) => {
 
 	return (
 		<div className="App">
+			<Head>
+				<title>Home Page</title>
+				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
+			</Head>
+
 			<header className="text-center">
 				<h1 className="px-10 py-10 bg-green-400 font-semibold font-mono text-white">
 					Hello from React + Tailwind + Typscript
