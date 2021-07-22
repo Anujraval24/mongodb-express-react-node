@@ -8,7 +8,7 @@ import ip from 'ip';
 import { greenBright, cyanBright } from 'chalk';
 
 // DB connection
-// import '../config/dbConnection';
+import '../config/dbConnection';
 
 const expressInit = (server) => {
 	return new Promise((resolve, reject) => {
@@ -36,7 +36,7 @@ const expressInit = (server) => {
 			console.info(cyanBright('API Running at'));
 			console.info(cyanBright(`${greenBright('\tLocalhost:')} ${BASE_API_URL}`));
 			console.info(cyanBright(`${greenBright('\tLAN:')} ${NETWORK_BASE_API_URL}`));
-			console.info(cyanBright(`${greenBright('\tUsers:')} ${`http://localhost:5000/api/v1/users`}`));
+			console.info(cyanBright(`${greenBright('\tUsers:')} ${`${BASE_API_URL}/users`}`));
 		});
 
 		resolve();
