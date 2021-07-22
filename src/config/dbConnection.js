@@ -4,8 +4,7 @@ import { redBright, greenBright, yellowBright } from 'chalk';
 
 // Database Name & URL
 const DATABASE_NAME = process.env.DATABASE_NAME;
-export const CONNECTION_URL = process.env.CONNECTION_URL + DATABASE_NAME + '?authSource=admin&ssl=false';
-
+export const CONNECTION_URL = process.env.CONNECTION_URL + DATABASE_NAME;
 (async () => {
 	try {
 		set('useCreateIndex', true);
