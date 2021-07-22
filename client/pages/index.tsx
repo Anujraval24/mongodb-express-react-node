@@ -16,7 +16,7 @@ const Home: FC<{ data: string[] }> = ({ data }) => {
 
 			<header className="text-center">
 				<h1 className="px-10 py-10 bg-green-400 font-semibold font-mono text-white">
-					Hello from React + Tailwind + Typscript
+					Hello from React ( Next JS ) + Tailwind CSS + Typscript
 				</h1>
 			</header>
 
