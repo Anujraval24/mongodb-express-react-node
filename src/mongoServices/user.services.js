@@ -29,5 +29,13 @@ const findAllQuery = async (query) => {
 	const totalCount = await userModel.find().countDocuments();
 	return { users, totalCount };
 };
+const userQuery = async (filter, projection) => {
+	let query = {
+		$or: [{ name: filter.name }, { email: filter.email }],
+	};
+	filter = filter && filter.orQuery ? query : filter;
+	const data = await userModel.findOne(filter, projection);
+	return data;
+};
 
-export default { findAllQuery };
+export default { findAllQuery, userQuery };
