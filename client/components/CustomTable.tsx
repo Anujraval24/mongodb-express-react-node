@@ -1,5 +1,11 @@
-import Image from 'next/image'
-const CustomTable = ({ data }: any) => {
+import Image from 'next/image';
+import { FC } from 'react';
+
+const CustomTable: FC<{
+	isOpen: boolean;
+	data: any;
+	editRecord: any;
+}> = ({ data, editRecord }) => {
 	return (
 		<div className="flex flex-col p-10">
 			<div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -84,7 +90,14 @@ const CustomTable = ({ data }: any) => {
 												</span>
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-												<button className="text-green-500 hover:text-green-700">Edit</button>
+												<button
+													className="text-green-500 hover:text-green-700"
+													onClick={() => {
+														editRecord(person);
+													}}
+												>
+													Edit
+												</button>
 											</td>
 										</tr>
 									))}

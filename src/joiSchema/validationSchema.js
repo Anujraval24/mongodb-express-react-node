@@ -17,7 +17,6 @@ function registerSchema(req, res, next) {
 		firstName: firstName.required(),
 		lastName: lastName.required(),
 		email: email.required(),
-		role: Joi.string().valid(ADMIN, USER, SUPER_USER),
 		password: password.required(),
 	});
 	validateRequest(req, res, next, schema);
