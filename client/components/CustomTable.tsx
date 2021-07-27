@@ -6,6 +6,7 @@ const CustomTable: FC<{
 	data: any;
 	editRecord: any;
 }> = ({ data, editRecord }) => {
+	
 	return (
 		<div className="flex flex-col p-10">
 			<div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

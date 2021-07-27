@@ -69,5 +69,39 @@ const register = async (req, res) => {
 		});
 	}
 };
+const updateUser = async (req, res) => {
+	try {
+		console.log(`req.body`, req.body);
+		const { _id } = req.body;
+		const data = await userService.findOneAndUpdateQuery(req?.body, _id);
+		data &&
+			res.status(200).send({
+				success: true,
+			});
+	} catch (error) {
+		errorLogger(error.message, req.originalUrl, req.ip);
+		res.status(400).send({
+			success: false,
+			message: error.message,
+		});
+	}
+};
+const updatestatus = async (req, res) => {
+	try {
+		const { status, _id } = req.body;
+		const update = { isActive: status };
+		const data = await userService.findOneAndUpdateQuery(update, _id);
+		data &&
+			res.status(200).send({
+				success: true,
+			});
+	} catch (error) {
+		errorLogger(error.message, req.originalUrl, req.ip);
+		res.status(400).send({
+			success: false,
+			message: error.message,
+		});
+	}
+};
 
-export default { getAllUsers, register };
+export default { getAllUsers, register, updateUser, updatestatus };

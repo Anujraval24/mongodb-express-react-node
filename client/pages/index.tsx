@@ -17,15 +17,10 @@ const Home: FC<{ data: string[] }> = ({ data }) => {
 		lastName: '',
 		email: '',
 		password: '',
+		_id: '',
 		isEdit: false,
 	});
 
-	const [formError, setformError] = useState({
-		firstNameError: '',
-		lastNameError: '',
-		emailError: '',
-		passwordError: '',
-	});
 	useEffect(() => {
 		data && data ? setIsLoading(false) : setIsLoading(true);
 	}, [data]);
@@ -36,33 +31,21 @@ const Home: FC<{ data: string[] }> = ({ data }) => {
 	};
 
 	const togglePopup = () => {
+		if (!isPopup) {
+			setFormField({ firstName: '', lastName: '', email: '', password: '', isEdit: false, _id: '' });
+		}
 		setisPopup((prevState) => !prevState);
-		setFormField({ firstName: '', lastName: '', email: '', password: '', isEdit: false });
 	};
-	const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-		event.preventDefault();
-		const { value, name } = event?.target;
-		console.log('value,name :>> ', value, name);
-		setFormField((prevState) => ({ ...prevState, [name]: value }));
-	};
+
 	const onSubmit = (event: any) => {
+		// event.preventDefault();
 		console.log('event :>> ', event);
-		event.preventDefault();
-		const { firstName, lastName, email, password } = formField;
-		if (firstName && lastName && email && password) {
-			// data submit
-			addUser(formField);
+		if (event.password === undefined) {
+			delete event.password;
+			event._id = formField._id;
+			updateUser(event);
 		} else {
-			!firstName
-				? setformError((prevState) => ({ ...prevState, firstNameError: 'firstName is required' }))
-				: firstName;
-			!lastName
-				? setformError((prevState) => ({ ...prevState, lastNameError: 'lastName is required' }))
-				: lastName;
-			!email ? setformError((prevState) => ({ ...prevState, emailError: 'email is required' })) : email;
-			!password
-				? setformError((prevState) => ({ ...prevState, passwordError: 'password is required' }))
-				: password;
+			addUser(event);
 		}
 	};
 	const addUser = async (formField: object) => {
@@ -70,17 +53,30 @@ const Home: FC<{ data: string[] }> = ({ data }) => {
 			await axios.post(`http://localhost:4000/api/v1/users/register`, {
 				...formField,
 			});
-			setisPopup(false);
 			toast.success('data adding success');
-			RefreshData();
 		} catch (error) {
 			// error in regrestion
 			toast.error('data adding failed');
 		}
+		setisPopup(false);
+		RefreshData();
+	};
+	const updateUser = async (data: object) => {
+		try {
+			await axios.put(`http://localhost:4000/api/v1/users/update`, {
+				...data,
+			});
+			toast.success('data update success');
+		} catch (error) {
+			// error in regrestion
+			toast.error('data update failed');
+		}
+		setisPopup(false);
+		RefreshData();
 	};
 	const editRecord = (event: any) => {
+		console.log('event :>> ', event);
 		setFormField({ ...event, isEdit: true });
-
 		setisPopup((prevState) => !prevState);
 	};
 
@@ -122,14 +118,7 @@ const Home: FC<{ data: string[] }> = ({ data }) => {
 					<CustomTable data={data} isOpen={isPopup} editRecord={editRecord} />
 				)}
 			</div>
-			<Popup
-				isOpen={isPopup}
-				toggleModal={togglePopup}
-				formField={formField}
-				handleChange={handleChange}
-				onSubmit={onSubmit}
-				error={formError}
-			/>
+			<Popup isOpen={isPopup} toggleModal={togglePopup} onSubmit={onSubmit} formField={formField} />
 			<Toaster />
 		</div>
 	);

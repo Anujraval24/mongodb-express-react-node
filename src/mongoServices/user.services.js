@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { userModel } from '../models';
 
 const findAllQuery = async (query) => {
@@ -37,5 +38,11 @@ const userQuery = async (filter, projection) => {
 	const data = await userModel.findOne(filter, projection);
 	return data;
 };
+const findOneAndUpdateQuery = async (update, id) => {
+	const filter = { _id: Types.ObjectId(id) };
 
-export default { findAllQuery, userQuery };
+	const result = await userModel.findOneAndUpdate(filter, { $set: update });
+	return result;
+};
+
+export default { findAllQuery, userQuery, findOneAndUpdateQuery };
