@@ -1,8 +1,8 @@
 import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState, FC, useEffect } from 'react';
+import { Fragment, FC, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 const inputStyle =
-	'bg-white h-12 w-full px-5 pr-10 mt-5 rounded-full text-sm border-2 border-solid border-gray-300 focus:outline-none';
+	'bg-white h-12 w-full px-5 pr-10 mt-5 rounded-full text-sm border-2 border-solid border-gray-300 focus:outline-none focus:border-green-500';
 const formStyle = 'bg-white rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2';
 
 const Popup: FC<{
@@ -10,23 +10,24 @@ const Popup: FC<{
 	toggleModal: () => void;
 	onSubmit: any;
 	formField: any;
-}> = ({ isOpen, toggleModal, onSubmit, formField: { firstName, lastName, email, isEdit, _id } }) => {
+}> = ({ isOpen, toggleModal, onSubmit, formField: { firstName, lastName, email, isEdit } }) => {
 	const {
 		register,
 		formState: { errors },
 		handleSubmit,
 		setValue,
+		reset
 	} = useForm();
 
 	const ErrorMsg = ({ inputName }: any) => (
 		<>
 			{errors[inputName] && (
-				<small className="text-sm text-red-400 font-medium block mt-1 px-4">
+				<small className="text-sm text-red-400 font-medium block mt-1 px-4 capitalize">
 					{errors[inputName]['message']
 						? errors[inputName]['message']
 						: errors[inputName]['type'] === 'allowed'
 						? `invalid username`
-						: `${inputName} is required`}
+						: `${inputName} is required *`}
 				</small>
 			)}
 		</>
@@ -34,17 +35,19 @@ const Popup: FC<{
 
 	useEffect(() => {
 		if (isEdit === true) {
+			reset()
 			setTimeout(() => {
 				setValue('firstName', firstName);
 				setValue('lastName', lastName);
 				setValue('email', email);
 			});
 		} else {
+			reset()
 			setValue('firstName', '');
 			setValue('lastName', '');
 			setValue('email', '');
 		}
-	}, [email, firstName, isEdit, isOpen, lastName, setValue]);
+	}, [email, firstName, isEdit, isOpen, lastName, setValue,reset]);
 	return (
 		<>
 			<Transition appear show={isOpen} as={Fragment}>
@@ -77,7 +80,9 @@ const Popup: FC<{
 						>
 							<div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
 								<form className={formStyle} onSubmit={handleSubmit(onSubmit)}>
-									<h3 className="text-lg text-center px-4 my-3">Add User</h3>
+									<h3 className="text-lg text-center px-4 my-3">
+										{isEdit === true ? 'Edit' : 'Add'} User
+									</h3>
 
 									<input
 										className={inputStyle}
@@ -88,7 +93,7 @@ const Popup: FC<{
 
 									<input
 										className={inputStyle}
-										placeholder="last Name"
+										placeholder="Last Name"
 										{...register('lastName', {
 											required: true,
 										})}
@@ -107,24 +112,18 @@ const Popup: FC<{
 											<input
 												className={inputStyle}
 												placeholder="Password"
-												{...register('password', { required: !!isEdit })}
+												{...register('password', { required: !isEdit })}
 												type="password"
 											/>
 											<ErrorMsg inputName="password" />
 										</Fragment>
 									)}
-									{isEdit === false ? (
-										<input
-											type="submit"
-											className="w-full text-md px-5 py-2 my-4 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none"
-										/>
-									) : (
-										<input
-											type="submit"
-											className="w-full text-md px-5 py-2 my-4 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none"
-											value="update"
-										/>
-									)}
+
+									<input
+										type="submit"
+										className="w-full text-md px-5 py-2 my-4 bg-red-500 text-white rounded-full hover:bg-red-600 focus:outline-none"
+										value={isEdit === false ? 'Submit' : 'Update'}
+									/>
 								</form>
 							</div>
 						</Transition.Child>

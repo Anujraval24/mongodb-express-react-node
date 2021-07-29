@@ -71,7 +71,6 @@ const register = async (req, res) => {
 };
 const updateUser = async (req, res) => {
 	try {
-		console.log(`req.body`, req.body);
 		const { _id } = req.body;
 		const data = await userService.findOneAndUpdateQuery(req?.body, _id);
 		data &&
@@ -89,7 +88,7 @@ const updateUser = async (req, res) => {
 const updatestatus = async (req, res) => {
 	try {
 		const { status, _id } = req.body;
-		const update = { isActive: status };
+		const update = { isVerified: !status };
 		const data = await userService.findOneAndUpdateQuery(update, _id);
 		data &&
 			res.status(200).send({
