@@ -48,7 +48,7 @@ const Home: FC<{ data: string[] }> = ({ data }) => {
 	};
 	const addUser = async (formField: object) => {
 		try {
-			await axios.post(`http://localhost:4000/api/v1/users/register`, {
+			await axios.post(`${process.env.API_URL}/users/register`, {
 				...formField,
 			});
 			toast.success('data adding success');
@@ -61,7 +61,7 @@ const Home: FC<{ data: string[] }> = ({ data }) => {
 	};
 	const updateUser = async (data: object) => {
 		try {
-			await axios.put(`http://localhost:4000/api/v1/users/update`, {
+			await axios.put(`${process.env.API_URL}/users/update`, {
 				...data,
 			});
 			toast.success('data update success');
@@ -83,14 +83,14 @@ const Home: FC<{ data: string[] }> = ({ data }) => {
 
 	const changeStatus = async (data: object) => {
 		try {
-			await axios.put(`http://localhost:4000/api/v1/users/status`, {
+			await axios.put(`${process.env.API_URL}/users/status`, {
 				...data,
 			});
-			RefreshData();
 		} catch (error) {
 			// error in regrestion
 			toast.error('status update failed');
 		}
+		RefreshData();
 	};
 
 	return (
