@@ -3,12 +3,12 @@ import axios from 'axios';
 import Head from 'next/head';
 import { GoMarkGithub } from 'react-icons/go';
 import { useRouter } from 'next/router';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import CustomTable from '../components/CustomTable';
 import Popup from '../components/Popup';
 import Link from 'next/link';
 
-const Home: FC<{ data: string[] }> = ({ data }) => {
+const Home: FC<{ data: string[]; API_URL: string }> = ({ data, API_URL }) => {
 	const [isPopup, setisPopup] = useState(false);
 	let [loading, setLoading] = useState(true);
 	const [formField, setFormField] = useState({
@@ -36,8 +36,6 @@ const Home: FC<{ data: string[] }> = ({ data }) => {
 	};
 
 	const onSubmit = (event: any) => {
-		// event.preventDefault();
-		console.log('event :>> ', event);
 		if (event.password === undefined) {
 			delete event.password;
 			event._id = formField._id;
@@ -48,26 +46,27 @@ const Home: FC<{ data: string[] }> = ({ data }) => {
 	};
 	const addUser = async (formField: object) => {
 		try {
-			await axios.post(`${process.env.API_URL}/users/register`, {
+			const data = await axios.post(`${API_URL}/users/register`, {
 				...formField,
 			});
-			toast.success('data adding success');
+			console.log(`data`, data);
+			toast.success('User added Successfully.');
 		} catch (error) {
-			// error in regrestion
-			toast.error('data adding failed');
+			const { data } = error?.response;
+			console.log(`error`, data.message);
+			toast.error(data?.message);
 		}
 		setisPopup(false);
 		RefreshData();
 	};
 	const updateUser = async (data: object) => {
 		try {
-			await axios.put(`${process.env.API_URL}/users/update`, {
+			await axios.put(`${API_URL}/users/update`, {
 				...data,
 			});
-			toast.success('data update success');
+			toast.success('User updated Successfully.');
 		} catch (error) {
-			// error in regrestion
-			toast.error('data update failed');
+			toast.error('Error updating User.');
 		}
 		setisPopup(false);
 		RefreshData();
@@ -83,12 +82,12 @@ const Home: FC<{ data: string[] }> = ({ data }) => {
 
 	const changeStatus = async (data: object) => {
 		try {
-			await axios.put(`${process.env.API_URL}/users/status`, {
+			await axios.put(`${API_URL}/users/status`, {
 				...data,
 			});
+			toast.success('Status Updated Successfully.');
 		} catch (error) {
-			// error in regrestion
-			toast.error('status update failed');
+			toast.error('Error updating Status.');
 		}
 		RefreshData();
 	};
@@ -100,7 +99,7 @@ const Home: FC<{ data: string[] }> = ({ data }) => {
 				<meta name="viewport" content="initial-scale=1.0, width=device-width" />
 			</Head>
 
-			<header className="text-center animate-bounce bg-green-500 duration-200">
+			<header className="text-center animate-pulse duration-75 bg-green-500">
 				<h1 className="px-10 py-10  font-semibold font-mono text-white">
 					Hello from React ( Next JS ) + Tailwind + Typscript
 				</h1>
@@ -136,7 +135,6 @@ const Home: FC<{ data: string[] }> = ({ data }) => {
 				/>
 			</div>
 			<Popup isOpen={isPopup} toggleModal={togglePopup} onSubmit={onSubmit} formField={formField} />
-			<Toaster />
 		</div>
 	);
 };
@@ -144,7 +142,7 @@ const Home: FC<{ data: string[] }> = ({ data }) => {
 export async function getServerSideProps() {
 	const { data } = await axios.get(`${process.env.API_URL}/users`);
 	return {
-		props: { data: data?.data, revalidate: 15 }, // will be passed to the page component as props
+		props: { data: data?.data, revalidate: 15, API_URL: process.env.API_URL }, // will be passed to the page component as props
 	};
 }
 

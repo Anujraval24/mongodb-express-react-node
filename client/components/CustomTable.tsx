@@ -6,10 +6,10 @@ import { override } from '../pages/_app';
 
 const CustomTable: FC<{
 	isOpen: boolean;
-	data: any;
-	editRecord: any;
+	data: string[];
+	editRecord: (event: any) => void;
 	toggleSwitch: (event: React.ChangeEvent<HTMLInputElement>) => void;
-	isLoading: any;
+	isLoading: boolean;
 }> = ({ data, editRecord, toggleSwitch, isLoading }) => {
 	return (
 		<div className="flex flex-col p-10">
@@ -18,7 +18,7 @@ const CustomTable: FC<{
 					<div className="shadow-md overflow-hidden border-b border-gray-200 sm:rounded-lg">
 						<table className="min-w-full divide-y divide-gray-200">
 							<thead className="bg-gray-50">
-								<tr>
+								<tr className="">
 									<th
 										scope="col"
 										className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
@@ -49,8 +49,11 @@ const CustomTable: FC<{
 									>
 										isVerified
 									</th>
-									<th scope="col" className="relative px-6 py-3">
-										<span className="sr-only">Edit</span>
+									<th
+										scope="col"
+										className="px-6 py-3 text-right text-xs font-medium text-gray-500 tracking-wider"
+									>
+										Action
 									</th>
 								</tr>
 							</thead>
@@ -61,8 +64,7 @@ const CustomTable: FC<{
 											<BeatLoader loading={isLoading} css={override} size={25} color="#20B49B" />
 										</td>
 									</tr>
-								) : (
-									data?.length > 0 &&
+								) : data?.length > 0 ? (
 									data?.map((person: any) => (
 										<tr key={person.email}>
 											<td className="px-6 py-4 whitespace-nowrap">
@@ -115,6 +117,8 @@ const CustomTable: FC<{
 											</td>
 										</tr>
 									))
+								) : (
+									<div className="p-10">No Data Found</div>
 								)}
 							</tbody>
 						</table>

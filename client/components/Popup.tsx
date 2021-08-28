@@ -16,7 +16,7 @@ const Popup: FC<{
 		formState: { errors },
 		handleSubmit,
 		setValue,
-		reset
+		reset,
 	} = useForm();
 
 	const ErrorMsg = ({ inputName }: any) => (
@@ -35,19 +35,19 @@ const Popup: FC<{
 
 	useEffect(() => {
 		if (isEdit === true) {
-			reset()
+			reset();
 			setTimeout(() => {
 				setValue('firstName', firstName);
 				setValue('lastName', lastName);
 				setValue('email', email);
 			});
 		} else {
-			reset()
+			reset();
 			setValue('firstName', '');
 			setValue('lastName', '');
 			setValue('email', '');
 		}
-	}, [email, firstName, isEdit, isOpen, lastName, setValue,reset]);
+	}, [email, firstName, isEdit, isOpen, lastName, setValue, reset]);
 	return (
 		<>
 			<Transition appear show={isOpen} as={Fragment}>
@@ -102,7 +102,7 @@ const Popup: FC<{
 									<input
 										className={inputStyle}
 										placeholder="Email"
-										{...register('email', { required: true })}
+										{...register('email', { required: true, pattern: /^\S+@\S+$/i })}
 										type="email"
 									/>
 									<ErrorMsg inputName="email" />
@@ -112,7 +112,7 @@ const Popup: FC<{
 											<input
 												className={inputStyle}
 												placeholder="Password"
-												{...register('password', { required: !isEdit })}
+												{...register('password', { required: !isEdit, minLength: 6 })}
 												type="password"
 											/>
 											<ErrorMsg inputName="password" />
