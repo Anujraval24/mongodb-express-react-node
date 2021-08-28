@@ -1,5 +1,16 @@
-import Image from 'next/image'
-const CustomTable = ({ data }: any) => {
+import Image from 'next/image';
+import { FC } from 'react';
+import Switch from './Switch';
+import BeatLoader from 'react-spinners/BeatLoader';
+import { override } from '../pages/_app';
+
+const CustomTable: FC<{
+	isOpen: boolean;
+	data: string[];
+	editRecord: (event: any) => void;
+	toggleSwitch: (event: React.ChangeEvent<HTMLInputElement>) => void;
+	isLoading: boolean;
+}> = ({ data, editRecord, toggleSwitch, isLoading }) => {
 	return (
 		<div className="flex flex-col p-10">
 			<div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -7,7 +18,7 @@ const CustomTable = ({ data }: any) => {
 					<div className="shadow-md overflow-hidden border-b border-gray-200 sm:rounded-lg">
 						<table className="min-w-full divide-y divide-gray-200">
 							<thead className="bg-gray-50">
-								<tr>
+								<tr className="">
 									<th
 										scope="col"
 										className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
@@ -36,15 +47,24 @@ const CustomTable = ({ data }: any) => {
 										scope="col"
 										className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
 									>
-										IsActive
+										isVerified
 									</th>
-									<th scope="col" className="relative px-6 py-3">
-										<span className="sr-only">Edit</span>
+									<th
+										scope="col"
+										className="px-6 py-3 text-right text-xs font-medium text-gray-500 tracking-wider"
+									>
+										Action
 									</th>
 								</tr>
 							</thead>
 							<tbody className="bg-white divide-y divide-gray-200">
-								{data?.length > 0 &&
+								{isLoading ? (
+									<tr>
+										<td className="text-center" colSpan={5}>
+											<BeatLoader loading={isLoading} css={override} size={25} color="#20B49B" />
+										</td>
+									</tr>
+								) : data?.length > 0 ? (
 									data?.map((person: any) => (
 										<tr key={person.email}>
 											<td className="px-6 py-4 whitespace-nowrap">
@@ -79,15 +99,27 @@ const CustomTable = ({ data }: any) => {
 												<div className="text-sm text-gray-500">{person.email}</div>
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-												<span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-													{person.isActive ? 'Active' : 'InActive'}
-												</span>
+												<Switch
+													isenable={person.isVerified}
+													toggleChange={toggleSwitch}
+													id={person._id}
+												/>
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-												<button className="text-green-500 hover:text-green-700">Edit</button>
+												<button
+													className="text-green-500 hover:text-green-700"
+													onClick={() => {
+														editRecord(person);
+													}}
+												>
+													Edit
+												</button>
 											</td>
 										</tr>
-									))}
+									))
+								) : (
+									<div className="p-10">No Data Found</div>
+								)}
 							</tbody>
 						</table>
 					</div>

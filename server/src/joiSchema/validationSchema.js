@@ -17,12 +17,21 @@ function registerSchema(req, res, next) {
 		firstName: firstName.required(),
 		lastName: lastName.required(),
 		email: email.required(),
-		role: Joi.string().valid(ADMIN, USER, SUPER_USER),
 		password: password.required(),
+	});
+	validateRequest(req, res, next, schema);
+}
+function updateSchema(req, res, next) {
+	const schema = Joi.object({
+		firstName: firstName.required(),
+		lastName: lastName.required(),
+		email: email.required(),
+		_id: Joi.string(),
 	});
 	validateRequest(req, res, next, schema);
 }
 
 export default {
 	registerSchema,
+	updateSchema,
 };

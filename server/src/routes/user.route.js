@@ -6,4 +6,7 @@ import { validationSchema } from '../joiSchema';
 export default express
 	.Router()
 	.post('/register', validationSchema.registerSchema, userController.register)
-	.get('/',  userController.getAllUsers);
+	.get('/', userController.getAllUsers)
+	.put('/status', userController.updatestatus)
+	.put('/update', validationSchema.updateSchema, userController.updateUser)
+	.put('/status', userController.updatestatus);
