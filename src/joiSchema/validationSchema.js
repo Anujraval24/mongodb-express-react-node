@@ -21,7 +21,17 @@ function registerSchema(req, res, next) {
 	});
 	validateRequest(req, res, next, schema);
 }
+function updateSchema(req, res, next) {
+	const schema = Joi.object({
+		firstName: firstName.required(),
+		lastName: lastName.required(),
+		email: email.required(),
+		_id: Joi.string(),
+	});
+	validateRequest(req, res, next, schema);
+}
 
 export default {
 	registerSchema,
+	updateSchema,
 };

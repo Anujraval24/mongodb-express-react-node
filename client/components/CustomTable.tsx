@@ -1,11 +1,16 @@
 import Image from 'next/image';
 import { FC } from 'react';
+import Switch from './Switch';
+import BeatLoader from 'react-spinners/BeatLoader';
+import { override } from '../pages/_app';
 
 const CustomTable: FC<{
 	isOpen: boolean;
 	data: any;
 	editRecord: any;
-}> = ({ data, editRecord }) => {
+	toggleSwitch: (event: React.ChangeEvent<HTMLInputElement>) => void;
+	isLoading: any;
+}> = ({ data, editRecord, toggleSwitch, isLoading }) => {
 	return (
 		<div className="flex flex-col p-10">
 			<div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -42,7 +47,7 @@ const CustomTable: FC<{
 										scope="col"
 										className="px-6 py-3 text-left text-xs font-medium text-gray-500 tracking-wider"
 									>
-										IsActive
+										isVerified
 									</th>
 									<th scope="col" className="relative px-6 py-3">
 										<span className="sr-only">Edit</span>
@@ -50,7 +55,14 @@ const CustomTable: FC<{
 								</tr>
 							</thead>
 							<tbody className="bg-white divide-y divide-gray-200">
-								{data?.length > 0 &&
+								{isLoading ? (
+									<tr>
+										<td className="text-center" colSpan={5}>
+											<BeatLoader loading={isLoading} css={override} size={25} color="#20B49B" />
+										</td>
+									</tr>
+								) : (
+									data?.length > 0 &&
 									data?.map((person: any) => (
 										<tr key={person.email}>
 											<td className="px-6 py-4 whitespace-nowrap">
@@ -85,9 +97,11 @@ const CustomTable: FC<{
 												<div className="text-sm text-gray-500">{person.email}</div>
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-												<span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-													{person.isActive ? 'Active' : 'InActive'}
-												</span>
+												<Switch
+													isenable={person.isVerified}
+													toggleChange={toggleSwitch}
+													id={person._id}
+												/>
 											</td>
 											<td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
 												<button
@@ -100,7 +114,8 @@ const CustomTable: FC<{
 												</button>
 											</td>
 										</tr>
-									))}
+									))
+								)}
 							</tbody>
 						</table>
 					</div>
